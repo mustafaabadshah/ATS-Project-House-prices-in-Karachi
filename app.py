@@ -57,25 +57,34 @@ st.markdown(
 st.title("🏠 Karachi House Price Prediction")
 st.markdown("<p class='subheader'>Estimate the price of houses in various locations within Karachi using our machine learning model.</p>", unsafe_allow_html=True)
 
+# Session State Initialization
+if 'input_values' not in st.session_state:
+    st.session_state.input_values = {
+        'location': columns[3] if len(columns) > 3 else '',
+        'area_sq_yards': 0,
+        'no_of_bedrooms': 1,
+        'no_of_bathrooms': 1
+    }
+
 # Layout with Columns
 col1, col2 = st.columns(2)
 
 with col1:
     location_columns = columns[3:]
-    location = st.selectbox("Select Location", location_columns, key='location')
+    st.session_state.input_values['location'] = st.selectbox("Select Location", location_columns, index=location_columns.index(st.session_state.input_values['location']), key='location')
 
-    area_sq_yards = st.number_input("Area in Square Yards", min_value=0, step=1, help="Enter the total area of the house in square yards.")
+    st.session_state.input_values['area_sq_yards'] = st.number_input("Area in Square Yards", min_value=0, step=1, value=st.session_state.input_values['area_sq_yards'], help="Enter the total area of the house in square yards.")
 
 with col2:
-    no_of_bedrooms = st.number_input("Number of Bedrooms", min_value=1, step=1, help="Enter the number of bedrooms in the house.")
-    no_of_bathrooms = st.number_input("Number of Bathrooms", min_value=1, step=1, help="Enter the number of bathrooms in the house.")
+    st.session_state.input_values['no_of_bedrooms'] = st.number_input("Number of Bedrooms", min_value=1, step=1, value=st.session_state.input_values['no_of_bedrooms'], help="Enter the number of bedrooms in the house.")
+    st.session_state.input_values['no_of_bathrooms'] = st.number_input("Number of Bathrooms", min_value=1, step=1, value=st.session_state.input_values['no_of_bathrooms'], help="Enter the number of bathrooms in the house.")
 
 # Validate inputs
-valid, message = validate_inputs(area_sq_yards, no_of_bedrooms, no_of_bathrooms)
+valid, message = validate_inputs(st.session_state.input_values['area_sq_yards'], st.session_state.input_values['no_of_bedrooms'], st.session_state.input_values['no_of_bathrooms'])
 
 if st.button("🔍 Predict Price", key='predict_button'):
     if valid:
-        price = predict_price(model, location, area_sq_yards, no_of_bedrooms, no_of_bathrooms)
+        price = predict_price(model, st.session_state.input_values['location'], st.session_state.input_values['area_sq_yards'], st.session_state.input_values['no_of_bedrooms'], st.session_state.input_values['no_of_bathrooms'])
         st.markdown(f"<p class='success'>🏷️ The estimated house price is **{price:.2f} Lakhs**</p>", unsafe_allow_html=True)
     else:
         st.markdown(f"<p class='error'>{message}</p>", unsafe_allow_html=True)
@@ -84,7 +93,6 @@ st.markdown("---")
 st.markdown("<p class='subheader'>About this App</p>", unsafe_allow_html=True)
 st.info("This app is a tool to predict house prices in Karachi using machine learning. Ensure that the inputs are realistic for accurate predictions.")
 
-
 # Add a Custom Footer
 st.markdown("<style>footer {visibility: hidden;} .stApp {bottom: 0; position: fixed; width: 100%; color: gray; background-color: #f0f2f6; padding: 10px; text-align: center; font-size: small;}</style>", unsafe_allow_html=True)
-st.markdown("Developed by [Mustafa Badshah](https://github.com/mustafaabadshah) | © 2024 All rights reserved.", unsafe_allow_html=True)
+st.markdown("Developed by [Mustafa Badshah](https://www.linkedin.com/in/syedmustafabadshah/) | © 2024 All rights reserved.", unsafe_allow_html=True)
