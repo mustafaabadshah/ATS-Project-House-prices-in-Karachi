@@ -85,7 +85,7 @@ valid, message = validate_inputs(st.session_state.input_values['area_sq_yards'],
 if st.button("🔍 Predict Price", key='predict_button'):
     if valid:
         price = predict_price(model, st.session_state.input_values['location'], st.session_state.input_values['area_sq_yards'], st.session_state.input_values['no_of_bedrooms'], st.session_state.input_values['no_of_bathrooms'])
-        st.markdown(f"<p class='success'>🏷️ The estimated house price is **{price:.2f} Lakhs**</p>", unsafe_allow_html=True)
+        st.markdown(f"<p class='success'>🏷️ The estimated house price is {price:.2f} Lakhs</p>", unsafe_allow_html=True)
     else:
         st.markdown(f"<p class='error'>{message}</p>", unsafe_allow_html=True)
 
