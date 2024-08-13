@@ -4,11 +4,17 @@ import json
 import numpy as np
 
 # Load column names from JSON file
-with open('columns-v1.json', 'r') as file:
-    columns = json.load(file)
+@st.cache_resource
+def load_model():
+    return joblib.load('random_forest_regressor_model.pkl')
 
-# Load the trained model
-model = joblib.load('decision_tree_regressor.pkl')
+@st.cache_data
+def load_columns():
+    with open('columns-v1.json', 'r') as file:
+        return json.load(file)
+
+model = load_model()
+columns = load_columns()
 
 def validate_inputs(sqft, bedrooms, baths):
     """Validate if the given area can accommodate the specified number of bedrooms and bathrooms."""
@@ -33,43 +39,51 @@ def predict_price(model, location, sqft, bedrooms, baths):
     
     return model.predict([x])[0] / 100000
 
-# Page Title with Subheading
-st.title("🏠 Karachi House Price Prediction")
-st.markdown("Use this tool to estimate the price of houses in various locations within Karachi.")
+# Page Styling
+st.markdown(
+    """
+    <style>
+    .main {background-color: #f5f5f5; padding: 20px;}
+    .title {font-size: 36px; font-weight: bold; color: #333;}
+    .subheader {font-size: 24px; color: #555;}
+    .button {background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px;}
+    .button:hover {background-color: #45a049;}
+    .error {color: #e57373;}
+    .success {color: #81c784;}
+    .footer {background-color: #333; color: white; padding: 10px; text-align: center; font-size: small;}
+    </style>
+    """, unsafe_allow_html=True)
 
-# Use Columns for Layout
+st.title("🏠 Karachi House Price Prediction")
+st.markdown("<p class='subheader'>Estimate the price of houses in various locations within Karachi using our machine learning model.</p>", unsafe_allow_html=True)
+
+# Layout with Columns
 col1, col2 = st.columns(2)
 
 with col1:
-    # Select Location Dropdown
     location_columns = columns[3:]
-    location = st.selectbox("Select Location", location_columns)
+    location = st.selectbox("Select Location", location_columns, key='location')
 
-    # Area in Square Yards Input
     area_sq_yards = st.number_input("Area in Square Yards", min_value=0, step=1, help="Enter the total area of the house in square yards.")
 
 with col2:
-    # Number of Bedrooms Input
     no_of_bedrooms = st.number_input("Number of Bedrooms", min_value=1, step=1, help="Enter the number of bedrooms in the house.")
-
-    # Number of Bathrooms Input
     no_of_bathrooms = st.number_input("Number of Bathrooms", min_value=1, step=1, help="Enter the number of bathrooms in the house.")
 
 # Validate inputs
 valid, message = validate_inputs(area_sq_yards, no_of_bedrooms, no_of_bathrooms)
 
-# Add a Predict Button and Display the Result
-if st.button("🔍 Predict Price"):
+if st.button("🔍 Predict Price", key='predict_button'):
     if valid:
         price = predict_price(model, location, area_sq_yards, no_of_bedrooms, no_of_bathrooms)
-        st.success(f"🏷️ The estimated house price is **{price:.2f} Lakhs**")
+        st.markdown(f"<p class='success'>🏷️ The estimated house price is **{price:.2f} Lakhs**</p>", unsafe_allow_html=True)
     else:
-        st.error(message)
+        st.markdown(f"<p class='error'>{message}</p>", unsafe_allow_html=True)
 
-# Additional Information or Footer
 st.markdown("---")
-st.markdown("### About this App")
-st.info("This app is a tool to predict house prices in Karachi using machine learning. The predictions are based on factors like location, area, and number of rooms. For more accurate results, ensure that the inputs are realistic.")
+st.markdown("<p class='subheader'>About this App</p>", unsafe_allow_html=True)
+st.info("This app is a tool to predict house prices in Karachi using machine learning. Ensure that the inputs are realistic for accurate predictions.")
+
 
 # Add a Custom Footer
 st.markdown("<style>footer {visibility: hidden;} .stApp {bottom: 0; position: fixed; width: 100%; color: gray; background-color: #f0f2f6; padding: 10px; text-align: center; font-size: small;}</style>", unsafe_allow_html=True)
