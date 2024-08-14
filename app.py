@@ -37,7 +37,7 @@ def predict_price(model, location, sqft, bedrooms, baths):
     if loc_index >= 0:
         x[loc_index] = 1
     
-    return model.predict([x])[0] / 100000
+    return model.predict([x])[0] / 1000000
 
 # Page Styling
 st.markdown(
