@@ -102,15 +102,15 @@ st.markdown(
 
     /* Error and Success Messages */
     .error {
-        color: #ffffff;
-        background-color: rgba(0, 255, 0, 0.3);
+        color: ##ff1c1c;
+        background-color: rgba(255, 28, 28,0.6);
         padding: 10px;
         border-radius: 5px;
     }
     
     .success {
         color: #ffffff;
-        background-color: rgba(0, 255, 0, 0.3);
+        background-color: rgba(0, 255, 0, 0.6);
         padding: 10px;
         border-radius: 5px;
     }
