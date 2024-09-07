@@ -50,7 +50,7 @@ st.markdown(
     <style>
     /* Main Background */
     .main {
-        background-image: url('https://img.freepik.com/free-vector/man-telescope-looking-chart-rating-architecture-elements_126523-2932.jpg?w=740&t=st=1723633448~exp=1723634048~hmac=d3f3cb10ef7a696e740bd791ac2d9bab771238242327d579b03c9ae0dbf8691d');
+        background-image: url(/bgImg1.jpg);
         background-size: cover;
         background-position: center;
         color: #333333;
