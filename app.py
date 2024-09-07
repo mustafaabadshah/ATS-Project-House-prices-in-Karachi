@@ -84,12 +84,12 @@ def add_bg_image():
 
     /* Custom styling for success and error messages */
     .error {{
-        color: #ff1c1c;
-        background-color: rgba(255, 28, 28, 0.6);
-        padding: 10px;
-        border-radius: 5px;
-        text-align: center;
-    }}
+    color: white; /* White text color */
+    background-color: rgba(255, 28, 28, 0.7); /* Light red background */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}}
 
     .success {{
         color: #ffffff;
